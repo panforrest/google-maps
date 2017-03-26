@@ -27,7 +27,7 @@ class App extends Component {
 
         	const venues = response.body.response.venues
         	console.log(JSON.stringify(venues))  //console.log(JSON.stringify(response.body))
-        	
+
         	this.setState({
         		venues: venues
         	})
@@ -54,7 +54,7 @@ class App extends Component {
 			<div>
 			    This is React App!
 			    <div style={{width:300, height:600, background:'red'}}>
-			        <Map center={location} markers={markers} />
+			        <Map center={location} markers={this.state.venues} />
 			    </div>
 
 			    <Places venues={this.state.venues} />
