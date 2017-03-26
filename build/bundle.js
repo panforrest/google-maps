@@ -9490,58 +9490,69 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var App = function (_Component) {
-    _inherits(App, _Component);
+  _inherits(App, _Component);
 
-    function App() {
-        _classCallCheck(this, App);
+  function App() {
+    _classCallCheck(this, App);
 
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
+
+    _this.state = {
+      venues: []
+    };
+    return _this;
+  }
+
+  _createClass(App, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      console.log('componentDidMount: ');
+
+      var url = 'https://api.foursquare.com/v2/venues/search?v=20140806&ll=40.7575285,-73.9884469&client_id=VZZ1EUDOT0JYITGFDKVVMCLYHB3NURAYK3OHB5SK5N453NFD&client_secret=UAA15MIFIWVKZQRH22KPSYVWREIF2EMMH0GQ0ZKIQZC322NZ';
+
+      _superagent2.default.get(url).query(null).set('Accept', 'text/json') //.set('Accept', 'application/json') 
+      .end(function (error, response) {
+
+        var venues = response.body.response.venues;
+        console.log(JSON.stringify(venues)); //console.log(JSON.stringify(response.body))
+
+        _this2.setState({
+          venues: venues
+        });
+      });
     }
+  }, {
+    key: 'render',
+    value: function render() {
+      var location = {
+        lat: 40.7575285,
+        lng: -73.9884469
+      };
 
-    _createClass(App, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            console.log('componentDidMount: ');
-
-            var url = 'https://api.foursquare.com/v2/venues/search?v=20140806&ll=40.7575285,-73.9884469&client_id=VZZ1EUDOT0JYITGFDKVVMCLYHB3NURAYK3OHB5SK5N453NFD&client_secret=UAA15MIFIWVKZQRH22KPSYVWREIF2EMMH0GQ0ZKIQZC322NZ';
-
-            _superagent2.default.get(url).query(null).set('Accept', 'text/json') //.set('Accept', 'application/json') 
-            .end(function (error, response) {
-
-                var venues = response.body.response.venues;
-                console.log(JSON.stringify(venues)); //console.log(JSON.stringify(response.body))
-            });
+      var markers = [{
+        location: {
+          lat: 40.7575285,
+          lng: -73.9884469
         }
-    }, {
-        key: 'render',
-        value: function render() {
-            var location = {
-                lat: 40.7575285,
-                lng: -73.9884469
-            };
+      }];
 
-            var markers = [{
-                location: {
-                    lat: 40.7575285,
-                    lng: -73.9884469
-                }
-            }];
+      return _react2.default.createElement(
+        'div',
+        null,
+        'This is React App!',
+        _react2.default.createElement(
+          'div',
+          { style: { width: 300, height: 600, background: 'red' } },
+          _react2.default.createElement(_Map2.default, { center: location, markers: markers })
+        ),
+        _react2.default.createElement(_Places2.default, { venues: this.state.venues })
+      );
+    }
+  }]);
 
-            return _react2.default.createElement(
-                'div',
-                null,
-                'This is React App!',
-                _react2.default.createElement(
-                    'div',
-                    { style: { width: 300, height: 600, background: 'red' } },
-                    _react2.default.createElement(_Map2.default, { center: location, markers: markers })
-                ),
-                _react2.default.createElement(_Places2.default, null)
-            );
-        }
-    }]);
-
-    return App;
+  return App;
 }(_react.Component);
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
@@ -21899,7 +21910,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // <li key={i}>{venues.name}</li>
+
 
 var Places = function (_Component) {
 	_inherits(Places, _Component);
@@ -21913,10 +21925,23 @@ var Places = function (_Component) {
 	_createClass(Places, [{
 		key: 'render',
 		value: function render() {
+			var list = this.props.venues.map(function (venue, i) {
+				return _react2.default.createElement(
+					'li',
+					{ key: i },
+					venue.name
+				);
+			});
+
 			return _react2.default.createElement(
 				'div',
 				null,
-				'This is Places Component.'
+				'Venues',
+				_react2.default.createElement(
+					'ol',
+					null,
+					list
+				)
 			);
 		}
 	}]);

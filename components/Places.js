@@ -1,10 +1,21 @@
+                // <li key={i}>{venues.name}</li>
 import React, { Component } from 'react'
 
 class Places extends Component {
+
 	render(){
+        const list = this.props.venues.map((venue, i) => {
+        	return (
+                <li key={i}>{venue.name}</li>
+        	)
+        })
+
 		return(
-			<div>
-			    This is Places Component.
+			<div>Venues
+			    <ol>
+			        {list}
+			    </ol>
+			    
 			</div>
 		)
 	}
