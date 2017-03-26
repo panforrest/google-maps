@@ -9486,37 +9486,44 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var App = function (_Component) {
-	_inherits(App, _Component);
+  _inherits(App, _Component);
 
-	function App() {
-		_classCallCheck(this, App);
+  function App() {
+    _classCallCheck(this, App);
 
-		return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
-	}
+    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+  }
 
-	_createClass(App, [{
-		key: 'render',
-		value: function render() {
-			var location = {
-				lat: 40.7575285,
-				lng: -73.9884469
-			};
+  _createClass(App, [{
+    key: 'render',
+    value: function render() {
+      var location = {
+        lat: 40.7575285,
+        lng: -73.9884469
+      };
 
-			return _react2.default.createElement(
-				'div',
-				null,
-				'This is React App!',
-				_react2.default.createElement(
-					'div',
-					{ style: { width: 300, height: 600, background: 'red' } },
-					_react2.default.createElement(_Map2.default, { center: location })
-				),
-				_react2.default.createElement(_Places2.default, null)
-			);
-		}
-	}]);
+      var markers = [{
+        location: {
+          lat: 40.7575285,
+          lng: -73.9884469
+        }
+      }];
 
-	return App;
+      return _react2.default.createElement(
+        'div',
+        null,
+        'This is React App!',
+        _react2.default.createElement(
+          'div',
+          { style: { width: 300, height: 600, background: 'red' } },
+          _react2.default.createElement(_Map2.default, { center: location, markers: markers })
+        ),
+        _react2.default.createElement(_Places2.default, null)
+      );
+    }
+  }]);
+
+  return App;
 }(_react.Component);
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
@@ -21788,8 +21795,10 @@ module.exports = g;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -21808,29 +21817,43 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Map = function (_Component) {
-  _inherits(Map, _Component);
+    _inherits(Map, _Component);
 
-  function Map() {
-    _classCallCheck(this, Map);
+    function Map() {
+        _classCallCheck(this, Map);
 
-    return _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).apply(this, arguments));
-  }
-
-  _createClass(Map, [{
-    key: 'render',
-    value: function render() {
-      var mapContainer = _react2.default.createElement('div', { style: { height: '100%', width: '100%' } });
-
-      return _react2.default.createElement(_reactGoogleMaps.GoogleMapLoader, {
-        containerElement: mapContainer,
-        googleMapElement: _react2.default.createElement(_reactGoogleMaps.GoogleMap, {
-          defaultZoom: 15,
-          defaultCenter: this.props.center,
-          options: { steetViewControl: false, mapTypeControl: false } }) });
+        return _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).apply(this, arguments));
     }
-  }]);
 
-  return Map;
+    _createClass(Map, [{
+        key: 'render',
+        value: function render() {
+            var mapContainer = _react2.default.createElement('div', { style: { height: '100%', width: '100%' } });
+
+            var markers = this.props.markers.map(function (venue, i) {
+                var marker = {
+                    position: {
+                        lat: venue.location.lat,
+                        lng: venue.location.lng
+                    }
+                };
+                return _react2.default.createElement(_reactGoogleMaps.Marker, _extends({ key: i }, marker));
+            });
+
+            return _react2.default.createElement(_reactGoogleMaps.GoogleMapLoader, {
+                containerElement: mapContainer,
+                googleMapElement: _react2.default.createElement(
+                    _reactGoogleMaps.GoogleMap,
+                    {
+                        defaultZoom: 15,
+                        defaultCenter: this.props.center,
+                        options: { steetViewControl: false, mapTypeControl: false } },
+                    markers
+                ) });
+        }
+    }]);
+
+    return Map;
 }(_react.Component);
 
 exports.default = Map;
