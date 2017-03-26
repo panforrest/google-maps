@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
+import { GoogleMapLoader, GoogleMap, Marker } from 'react-google-maps'
 
 class Map extends Component {
 	render(){
-		return(
-			<div>
-			    This is Map Component. 
-			</div>
+        const mapContainer = <div style={{height:'100%', width:'100%'}}></div>
 
+		return(
+            <GoogleMapLoader
+                containerElement = { mapContainer }
+                googleMapElement = {
+                	<GoogleMap
+                	    defaultZoom={15}
+                	    defaultCenter={this.props.center}
+                	    options={{steetViewControl: false, mapTypeControl: false}}>
+                	</GoogleMap>
+                } />
 		)
 	}
 }
